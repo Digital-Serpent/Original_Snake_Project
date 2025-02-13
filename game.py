@@ -20,6 +20,9 @@ os.chdir(scriptDir)
 # initialize the pygame instance
 pygame.init()
 
+# Initialize the mixer module
+pygame.mixer.init()
+
 # set the default font and the font size
 font = pygame.font.Font("cour.ttf",25)
 
@@ -236,6 +239,11 @@ class SnakeGameAI:
         
         # new head position is on the food ( dont delete the tail)
         if self.head == self.food:
+            # Load the sound effect
+            sound_effect = pygame.mixer.Sound("Effects/eating.mp3")
+
+            # Play the sound effect
+            sound_effect.play()
 
             # update the score
             self.score += 1
@@ -248,11 +256,11 @@ class SnakeGameAI:
 
             # add the moves to the player               (adjust as needed)
             if len(self.snake)/self.newMoves < 0.25:
-                self.moves += 0.5 * self.newMoves
+                self.moves += int(0.5 * self.newMoves)
             elif len(self.snake)/self.newMoves < 0.5:
-                self.moves += 0.75 * self.newMoves
+                self.moves += int(0.75 * self.newMoves)
             else:
-                self.moves += self.newMoves
+                self.moves += int(self.newMoves)
         else: # no food
             # remove the last element in the tail (it has moved)
             self.snake.pop()
@@ -263,7 +271,6 @@ class SnakeGameAI:
         # update the movements dictionary with action and food data ( needs to occur after the food is placed)
         self.updateMovements(action, reward)
         return reward, gameOver, self.score, causeOfDeath, None
-
 
     def updateMovements(self, action, reward):
         """
@@ -492,7 +499,7 @@ class SnakeGameAI:
             pygame.draw.circle(self.display,BLACK,((self.head.x + 1) * BLOCK_SIZE - 5 , (self.head.y + 1) * BLOCK_SIZE - 5),2 )
         
         # Draw the food
-        pygame.draw.circle(self.display,YELLOW, (self.food.x * BLOCK_SIZE + BLOCK_SIZE/2,self.food.x * BLOCK_SIZE + BLOCK_SIZE/2), BLOCK_SIZE/2) 
+        pygame.draw.circle(self.display,YELLOW, (self.food.x * BLOCK_SIZE + BLOCK_SIZE/2,self.food.y * BLOCK_SIZE + BLOCK_SIZE/2), BLOCK_SIZE/2) 
 
 
         ##             Text Area
@@ -522,6 +529,11 @@ class SnakeGameAI:
 
         # pause to be able to see
         if isDead:
+            # Load the sound effect
+            sound_effect = pygame.mixer.Sound("Effects/DeathSound1.mp3")
+
+            # Play the sound effect
+            sound_effect.play()
             time.sleep(2)
         else:
             time.sleep(0.005)
@@ -606,6 +618,8 @@ def loadAndReplay(filePath):
     # set up the game, want to show the UI and set the correct width/height
     game = SnakeGameAI(activateGameWindow=True,w = data['w'],h = data['h'], replay = True)
 
+    time.sleep(5)
+
     game.food = Point(*data['food'][0])
     for action,food in zip(data['action'],data['food']):
 
@@ -615,8 +629,10 @@ def loadAndReplay(filePath):
         game.food = Point(*food)
 
         time.sleep(0.005) # adjust as needed
+    
+    
 
 
 if __name__ == '__main__':
-    loadAndReplay(r"C:\Users\benja\OneDrive\Documents\Git Repos\snake_ai_attpt2_New_State\ModelRuns\model_Gamma0.8_MEM100000_BATCH10000_LR0.0001\game292_score24.json")
+    loadAndReplay(r"D:\Digital_Serpent\Original_Snake_Project\ModelRuns\model_Gamma0.9_MEM100000_BATCH1000_LR0.001\game840_score10.json")
 
