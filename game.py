@@ -240,7 +240,8 @@ class SnakeGameAI:
         # new head position is on the food ( dont delete the tail)
         if self.head == self.food:
             # Load the sound effect
-            sound_effect = pygame.mixer.Sound("Effects/eating.mp3")
+            if self.activateGameWindow:
+                sound_effect = pygame.mixer.Sound("Effects/eating.mp3")
 
             # Play the sound effect
             sound_effect.play()
@@ -486,17 +487,17 @@ class SnakeGameAI:
 
         # draw eyes for the snake
         if self.direction == Direction.WEST:
-            pygame.draw.circle(self.display,BLACK,(self.head.x * BLOCK_SIZE + 5 , self.head.y * BLOCK_SIZE + 5),2 )
-            pygame.draw.circle(self.display,BLACK,(self.head.x * BLOCK_SIZE + 5 , (self.head.y + 1) * BLOCK_SIZE - 5),2 )
+            pygame.draw.circle(self.display,BLACK,((self.head.x + 0.25) * BLOCK_SIZE , (self.head.y + 0.25) * BLOCK_SIZE),int(BLOCK_SIZE/11))
+            pygame.draw.circle(self.display,BLACK,((self.head.x + 0.25) * BLOCK_SIZE , (self.head.y + 0.75) * BLOCK_SIZE),int(BLOCK_SIZE/11))
         elif self.direction == Direction.NORTH:
-            pygame.draw.circle(self.display,BLACK,(self.head.x * BLOCK_SIZE + 5 , self.head.y * BLOCK_SIZE + 5),2 )
-            pygame.draw.circle(self.display,BLACK,((self.head.x + 1) * BLOCK_SIZE - 5 , self.head.y * BLOCK_SIZE + 5),2 )
+            pygame.draw.circle(self.display,BLACK,((self.head.x + 0.25) * BLOCK_SIZE , (self.head.y + 0.25) * BLOCK_SIZE),int(BLOCK_SIZE/11))
+            pygame.draw.circle(self.display,BLACK,((self.head.x + 0.75) * BLOCK_SIZE , (self.head.y + 0.25) * BLOCK_SIZE),int(BLOCK_SIZE/11))
         elif self.direction == Direction.EAST:
-            pygame.draw.circle(self.display,BLACK,((self.head.x + 1) * BLOCK_SIZE - 5 , self.head.y * BLOCK_SIZE + 5),2 )
-            pygame.draw.circle(self.display,BLACK,((self.head.x + 1) * BLOCK_SIZE - 5 , (self.head.y + 1) * BLOCK_SIZE - 5),2 )
+            pygame.draw.circle(self.display,BLACK,((self.head.x + 0.75) * BLOCK_SIZE, (self.head.y + 0.25) * BLOCK_SIZE ),int(BLOCK_SIZE/11))
+            pygame.draw.circle(self.display,BLACK,((self.head.x + 0.75) * BLOCK_SIZE, (self.head.y + 0.75) * BLOCK_SIZE ),int(BLOCK_SIZE/11))
         elif self.direction == Direction.SOUTH:
-            pygame.draw.circle(self.display,BLACK,(self.head.x * BLOCK_SIZE + 5 , (self.head.y + 1) * BLOCK_SIZE - 5),2 )
-            pygame.draw.circle(self.display,BLACK,((self.head.x + 1) * BLOCK_SIZE - 5 , (self.head.y + 1) * BLOCK_SIZE - 5),2 )
+            pygame.draw.circle(self.display,BLACK,((self.head.x + 0.25) * BLOCK_SIZE , (self.head.y + 0.75) * BLOCK_SIZE),int(BLOCK_SIZE/11))
+            pygame.draw.circle(self.display,BLACK,((self.head.x + 0.75) * BLOCK_SIZE , (self.head.y + 0.75) * BLOCK_SIZE),int(BLOCK_SIZE/11))
         
         # Draw the food
         pygame.draw.circle(self.display,YELLOW, (self.food.x * BLOCK_SIZE + BLOCK_SIZE/2,self.food.y * BLOCK_SIZE + BLOCK_SIZE/2), BLOCK_SIZE/2) 
@@ -530,13 +531,14 @@ class SnakeGameAI:
         # pause to be able to see
         if isDead:
             # Load the sound effect
-            sound_effect = pygame.mixer.Sound("Effects/DeathSound1.mp3")
+            if self.activateGameWindow:
+                sound_effect = pygame.mixer.Sound("Effects/DeathSound1.mp3")
 
             # Play the sound effect
             sound_effect.play()
             time.sleep(2)
         else:
-            time.sleep(0.005)
+            time.sleep(0.015)
 
     def move(self,action):
         """
@@ -618,9 +620,11 @@ def loadAndReplay(filePath):
     # set up the game, want to show the UI and set the correct width/height
     game = SnakeGameAI(activateGameWindow=True,w = data['w'],h = data['h'], replay = True)
 
-    time.sleep(5)
-
+    
     game.food = Point(*data['food'][0])
+    game.updateUiWithWindow()
+    time.sleep(1)
+
     for action,food in zip(data['action'],data['food']):
 
         # simulate the action
