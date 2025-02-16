@@ -1,0 +1,8 @@
+numpy
+pygame
+pyaudio
+matplotlib
+pytorch
+opencv-python
+sounddevice
+soundfile

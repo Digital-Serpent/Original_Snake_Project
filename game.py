@@ -243,8 +243,8 @@ class SnakeGameAI:
             if self.activateGameWindow:
                 sound_effect = pygame.mixer.Sound("Effects/eating.mp3")
 
-            # Play the sound effect
-            sound_effect.play()
+                # Play the sound effect
+                sound_effect.play()
 
             # update the score
             self.score += 1
@@ -534,11 +534,9 @@ class SnakeGameAI:
             if self.activateGameWindow:
                 sound_effect = pygame.mixer.Sound("Effects/DeathSound1.mp3")
 
-            # Play the sound effect
-            sound_effect.play()
+                # Play the sound effect
+                sound_effect.play()
             time.sleep(2)
-        else:
-            time.sleep(0.015)
 
     def move(self,action):
         """
