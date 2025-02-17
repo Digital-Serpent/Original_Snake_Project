@@ -2,7 +2,11 @@ numpy
 pygame
 pyaudio
 matplotlib
-pytorch
+torch 
+torchvision 
+torchaudio
 opencv-python
 sounddevice
 soundfile
+
+# numpy pygame pyaudio matplotlib torch torchvision torchaudio opencv-python sounddevice soundfile
